@@ -64,12 +64,15 @@ const gameBoard = (() => {
         const cellNine = board[8];
 
         if(
+            //Three Rows
             (cellOne == 'X' && cellTwo == 'X' && cellThree == 'X') ||
             (cellFour == 'X' && cellFive == 'X' && cellSix == 'X') ||
             (cellSeven == 'X' && cellEight == 'X' && cellNine == 'X') ||
-            (cellTwo == 'X' && cellSix == 'X' && cellNine == 'X') ||
-            (cellThree == 'X' && cellFive == 'X' && cellEight == 'X') ||
+            //Three Columns
             (cellOne == 'X' && cellFour == 'X' && cellSeven == 'X') ||
+            (cellTwo == 'X' && cellFive == 'X' && cellEight == 'X') ||
+            (cellThree == 'X' && cellSix == 'X' && cellNine == 'X') ||
+            //Diagonal Outcomes
             (cellOne == 'X' && cellFive == 'X' && cellNine == 'X') ||
             (cellThree == 'X' && cellFive == 'X' && cellSeven == 'X')
         ){
