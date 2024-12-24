@@ -1,8 +1,49 @@
 
 
+
 const gameBoard = (() => {
     let board = ["empty","empty","empty","empty","empty","empty","empty","empty","empty",]
+    const player1 = (() =>{
+        const type = "X";
+        const map1 = new Map();
+        const getType =  () => { return type}
+        const getMap = () => {return map1}
+        const appendToMap = (value) =>{
+            map1.set(value, 0);
+        }
+        return {
+            getType,
+            getMap,
+            appendToMap
+        }
+    })();
+    
+    const player2 = (() =>{
+        const type = "O";
+        const map1 = new Map();
+        const getType = () => {return type}
+        const getMap = () => {return map1}
+        const appendToMap = (value) =>{
+            map1.set(value, 0);
+        }
+        return{
+            getType,
+            getMap,
+            appendToMap
+        }
 
+    })();
+
+    let currentPlayer = player1;
+
+    const switchplayer = (player) =>{
+        if(player == player1){
+            currentPlayer = player2
+        }else {currentPlayer = player1}
+    }
+    const player = () =>{
+        return currentPlayer;
+    }
     const updateGame = (player, location) => {
         if( board[location] == 'empty'){
 
@@ -68,82 +109,13 @@ const gameBoard = (() => {
         return true
     }
 
-    return {updateGame, checkWinCondition,checkBoard}
+    return {updateGame, checkWinCondition,checkBoard, switchplayer, player}
 
 })();
 
 
-
-function displayController(){
-    //display current game based on gameboard object
-}
-
-// gameBoard.updateGame("X", 5);
-
-function game(){
-    const player1 = (() =>{
-        const type = "X";
-        const map1 = new Map();
-        const getType =  () => { return type}
-        const getMap = () => {return map1}
-        const appendToMap = (value) =>{
-            map1.set(value, 0);
-        }
-        return {
-            getType,
-            getMap,
-            appendToMap
-        }
-    })();
-    
-    const player2 = (() =>{
-        const type = "O";
-        const map1 = new Map();
-        const getType = () => {return type}
-        const getMap = () => {return map1}
-        const appendToMap = (value) =>{
-            map1.set(value, 0);
-        }
-        return{
-            getType,
-            getMap,
-            appendToMap
-        }
-    })();
-    
-    let currentPlayer = player1;
-    
-    while (gameBoard.checkWinCondition() == 'active'){
-
-        let userInput = prompt("Enter location: ");
-
-        if(!gameBoard.checkBoard(userInput)){ // if false
-            gameBoard.updateGame(currentPlayer.getType() , userInput);
-        }
-        else{
-            //if true
-            while(gameBoard.checkBoard(userInput)){
-                userInput = prompt("Enter Another Location:");
-                console.log(userInput)
-            }
-            gameBoard.updateGame(currentPlayer.getType() , userInput);
-        }
-        
-        console.log(currentPlayer.getType())
-        currentPlayer.appendToMap(userInput);
-        console.log("-------------------------")
-        console.log(currentPlayer.getMap());
-        console.log("-------------------------")
-        
-        if(currentPlayer == player1){
-            currentPlayer = player2
-        }else{
-            currentPlayer = player1
-        }
-
-    }
-    let outcome = gameBoard.checkWinCondition();
-    console.log(outcome);
+function gameController(outcome){
+    const body = document.querySelector('body');
     if(outcome == 'p1'){
         //player 1 won
         console.log('p1 win')
@@ -157,13 +129,62 @@ function game(){
         console.log('Tied')
     }
     console.log("game done")
-   
+
+}
+function displayController(){
+    //display current game based on gameboard object
+
+
+}
+
+// gameBoard.updateGame("X", 5);
+
+function game(userInput, cell){
+    
+    let currentPlayer = gameBoard.player();
+    
+
+    if (currentPlayer.getType() == 'X'){
+        cell.textContent = 'X'
+    }else{cell.textContent = 'O'}
+
+    if (gameBoard.checkWinCondition() == 'active'){
+
+        gameBoard.updateGame(currentPlayer.getType() , userInput);
+        
+        
+        console.log(currentPlayer.getType())
+        currentPlayer.appendToMap(userInput);
+        console.log("-------------------------")
+        console.log(currentPlayer.getMap());
+        console.log("-------------------------")
+        
+        gameBoard.switchplayer(currentPlayer);
+    }
+
+    let outcome = gameBoard.checkWinCondition();
+
+    if(outcome != 'active'){
+        gameController(outcome);
+    }
     
 }
 
-const start_btn = document.querySelector(".start-game-btn");
 
-start_btn.addEventListener('click', () =>{
-    game();
-});
 
+
+// Grid buttons
+
+const grid_area = document.querySelector('.article')
+
+for(let i = 0; i < 9;i++){
+    const cell = document.createElement('div')
+    cell.classList.add('cell')
+    cell.addEventListener('click', () =>{
+        if(!gameBoard.checkBoard(i)){
+            game(i, cell);
+        }
+    })
+
+    grid_area.appendChild(cell)
+}

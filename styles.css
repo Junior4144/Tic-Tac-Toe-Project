@@ -8,10 +8,40 @@ body{
     background-color: #1e293b;
     color: white;
     font-weight: 900;
-    font-size: 24px;
+    font-size: 4rem;
 
     display:grid;
+    grid-template-columns: 9fr 10fr 9fr;
+    grid-template-rows: 200px 400px 100px;
+
+    grid-template-areas: 
+    ". header ."
+    ". article ."
+    ". footer .";
+    
+}.header{
+    grid-area: header;
+    display:flex;
+    flex-direction: column;
+
     justify-content: center;
     align-items: center;
-}
 
+}
+.article{
+    grid-area: article;
+    border:1px solid black;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+.cell{
+
+    background-color: white;
+    border:1px solid black;
+    color:black;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+}
