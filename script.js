@@ -36,7 +36,7 @@ const gameBoard = (() => {
 
     let currentPlayer = player1;
 
-    const switchplayer = (player) =>{
+    const switchPlayer = (player) =>{
         if(player == player1){
             currentPlayer = player2
         }else {currentPlayer = player1}
@@ -48,15 +48,10 @@ const gameBoard = (() => {
         if( board[location] == 'empty'){
 
             board.splice(location, 1, player)
-            console.log(board);
+            //console.log(board);
         }
     }
     const checkWinCondition = () =>{
-        //using a algorithm
-        // Depth first search
-        //have a list that has all "X" 
-        //when already access an "x" put it in a dictionary / Hashmap
-        //at a "X" go as deep as we can, if we hit 3 cells we then declare a winner
         let current = 'active';
         const cellOne = board[0];
         const cellTwo = board[1];
@@ -67,7 +62,6 @@ const gameBoard = (() => {
         const cellSeven = board[6];
         const cellEight = board[7];
         const cellNine = board[8];
-        // three rows
 
         if(
             (cellOne == 'X' && cellTwo == 'X' && cellThree == 'X') ||
@@ -82,12 +76,15 @@ const gameBoard = (() => {
             return 'p1'
         }
         if(
+            //Three ROWS
             (cellOne == 'O' && cellTwo == 'O' && cellThree == 'O') ||
             (cellFour == 'O' && cellFive == 'O' && cellSix == 'O') ||
             (cellSeven == 'O' && cellEight == 'O' && cellNine == 'O') ||
-            (cellTwo == 'O' && cellSix == 'O' && cellNine == 'O') ||
-            (cellThree == 'O' && cellFive == 'O' && cellEight == 'O') ||
+            //Three Columns
             (cellOne == 'O' && cellFour == 'O' && cellSeven == 'O') ||
+            (cellTwo == 'O' && cellFive == 'O' && cellEight == 'O') ||
+            (cellThree == 'O' && cellSix == 'O' && cellNine == 'O') ||
+            //Diagonal Outcomes
             (cellOne == 'O' && cellFive == 'O' && cellNine == 'O') ||
             (cellThree == 'O' && cellFive == 'O' && cellSeven == 'O')
         ){
@@ -109,35 +106,59 @@ const gameBoard = (() => {
         return true
     }
 
-    return {updateGame, checkWinCondition,checkBoard, switchplayer, player}
+    return {updateGame, checkWinCondition,checkBoard, switchPlayer, player}
 
 })();
 
 
 function gameController(outcome){
-    const body = document.querySelector('body');
+    const body = document.body;
+    const header = document.querySelector('.header');
+    const article = document.querySelector('.article');
+    const footer = document.querySelector('.footer');
+
+    header.style.display = 'none';
+    article.style.display = 'none';
+    footer.style.display = 'none';
+
+    const outcome_display = document.createElement('div');
+
+    const refresh_btn = document.createElement('button');
+    refresh_btn.classList.add('btn');
+    refresh_btn.textContent = "Click to restart";
+    refresh_btn.addEventListener('click', () =>{
+        location.reload();
+    });
+
+    body.appendChild(outcome_display);
+    body.appendChild(refresh_btn);
+    body.style.width = "100vw";
+    body.style.height ="100vh"
+    body.style.display = 'flex';
+    body.style.flexDirection = 'column';
+    body.style.justifyContent = 'center';
+    body.style.alignItems = 'center';
+
+
     if(outcome == 'p1'){
         //player 1 won
-        console.log('p1 win')
+       //console.log('p1 win')
+        outcome_display.textContent = 'Player 1 Is The Winner';
     }
     else if (outcome == 'p2'){
         //player 2 won
-        console.log('p2 win')
+       // console.log('p2 win')
+        outcome_display.textContent = 'Player 2 Is The Winner';
     }
     else{
         //Tied
-        console.log('Tied')
+        //console.log('Tied')
+        outcome_display.textContent = 'Game Ended In a Tie';
     }
-    console.log("game done")
-
-}
-function displayController(){
-    //display current game based on gameboard object
-
+   // console.log("game done")
 
 }
 
-// gameBoard.updateGame("X", 5);
 
 function game(userInput, cell){
     
@@ -153,13 +174,13 @@ function game(userInput, cell){
         gameBoard.updateGame(currentPlayer.getType() , userInput);
         
         
-        console.log(currentPlayer.getType())
-        currentPlayer.appendToMap(userInput);
-        console.log("-------------------------")
-        console.log(currentPlayer.getMap());
-        console.log("-------------------------")
+        // console.log(currentPlayer.getType())
+        // currentPlayer.appendToMap(userInput);
+        // console.log("-------------------------")
+        // console.log(currentPlayer.getMap());
+        // console.log("-------------------------")
         
-        gameBoard.switchplayer(currentPlayer);
+        gameBoard.switchPlayer(currentPlayer);
     }
 
     let outcome = gameBoard.checkWinCondition();
@@ -169,10 +190,6 @@ function game(userInput, cell){
     }
     
 }
-
-
-
-
 // Grid buttons
 
 const grid_area = document.querySelector('.article')
